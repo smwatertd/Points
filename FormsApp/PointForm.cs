@@ -85,9 +85,7 @@ namespace FormsApp
                     case ".custom":
                         var customSerializer = new CustomSerializer();
                         using (var writer = new StreamWriter(fs))
-                        {
                             customSerializer.Serialize(writer, points);
-                        }
                         break;
                 }
             }
@@ -134,9 +132,7 @@ namespace FormsApp
                     case ".custom":
                         var customSerializer = new CustomSerializer();
                         using (var reader = new StreamReader(fs))
-                        {
                             points = customSerializer.Deserialize(reader.ReadToEnd());
-                        }
                         break;
                 }
             }
