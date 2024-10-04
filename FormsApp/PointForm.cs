@@ -6,6 +6,8 @@ using System.Windows.Forms;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 using PointLib;
+using YamlDotNet.Serialization.NamingConventions;
+using YamlDotNet.Serialization;
 
 namespace FormsApp
 {
@@ -72,7 +74,11 @@ namespace FormsApp
                             jf.Serialize(w, points);
                         break;
                     case ".yaml":
-                        var serializer = new YamlDotNet.Serialization.Serializer();
+                        var serializer = new SerializerBuilder()
+                            .WithNamingConvention(CamelCaseNamingConvention.Instance)
+                            .WithTagMapping("!Point", typeof(Point))
+                            .WithTagMapping("!Point3D", typeof(Point3D))
+                            .Build();
                         using (var writer = new StreamWriter(fs))
                             serializer.Serialize(writer, points);
                         break;
@@ -117,7 +123,11 @@ namespace FormsApp
                             points = (Point[])jf.Deserialize(r, typeof(Point[]));
                         break;
                     case ".yaml":
-                        var deserializer = new YamlDotNet.Serialization.Deserializer();
+                        var deserializer = new DeserializerBuilder()
+                            .WithNamingConvention(CamelCaseNamingConvention.Instance)
+                            .WithTagMapping("!Point", typeof(Point))
+                            .WithTagMapping("!Point3D", typeof(Point3D))
+                            .Build();
                         using (var reader = new StreamReader(fs))
                             points = deserializer.Deserialize<Point[]>(reader);
                         break;
